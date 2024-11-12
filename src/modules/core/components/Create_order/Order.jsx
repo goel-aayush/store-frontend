@@ -77,8 +77,8 @@ export default function Order() {
     const orderData = {
       slip_no: slipNo,
       items,
-      name: Cookies.get("name"),
-      email: Cookies.get("user_email"),
+      name: user.name,
+      email: user.email,
       user_id: localStorage.getItem("user_id"),
       emp_code: user.emp_code,
       department: user.dept,
