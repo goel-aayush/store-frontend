@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Header from "../Header";
 import { Link, useParams } from "react-router-dom";
-import axios from "axios";
+import axios from '../../axiosauth/axiosConfig';
 import { useNavigate } from "react-router-dom";
 
 export default function Newpassword() {
