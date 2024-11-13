@@ -21,7 +21,7 @@ export default function Newpassword() {
       const apikey = process.env.REACT_APP_API_KEY_NEW_PASSWORD;
       const apiurl = process.env.REACT_APP_API_URL_NEW_PASSWORD;
       const response = await axios.post(
-        `https://store-management-nyeh.onrender.com/api/user/newpassword/${token}`,
+        `${apiurl}/${token}`,
         {
           newPassword: newPassword, // Send newPassword as an object
         },
