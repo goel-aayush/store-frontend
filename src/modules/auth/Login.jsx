@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Header from "../core/components/Header";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../core/axiosauth/axiosConfig";
-import Cookies from "js-cookie";
+
 import { Eye, EyeOff } from "lucide-react";
 
 export default function Login() {
