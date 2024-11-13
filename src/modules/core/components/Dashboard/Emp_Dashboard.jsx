@@ -1,9 +1,8 @@
-
 import React, { useEffect, useState } from 'react';
 import axios from '../../axiosauth/axiosConfig';
 import Cookies from 'js-cookie';
 
-const StoreDashboard = () => {
+const Dashboard = () => {
   const [orders, setOrders] = useState([]);
   const [inventory, setInventory] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -36,7 +35,7 @@ const StoreDashboard = () => {
 
   return (
     <div className="dashboard-container p-8 bg-gradient-to-r from-blue-100 via-blue-200 to-blue-300 min-h-screen">
-      <h1 className="text-4xl font-bold text-gray-800 mb-8 text-center">Admin Dashboard</h1>
+      <h1 className="text-4xl font-bold text-gray-800 mb-8 text-center">Employee Dashboard</h1>
 
       {/* Order Summary Section */}
       <section className="mb-12">
@@ -140,4 +139,4 @@ const InventoryCard = ({ item }) => (
   </div>
 );
 
-export default StoreDashboard;
+export default Dashboard;

@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from '../../core/components/Header';
 import Sidebar from '../../core/components/Sidebar';
-import Dashboard from '../../core/components/Dashboard/Dashboard'
+
 import { Outlet } from 'react-router-dom';
 
 export default function HoD() {

@@ -14,6 +14,7 @@ import Terms from './modules/core/components/Terms & Condition/Terms';
 import { UserProvider } from './modules/utils/UserContext';
 import Store from './modules/employees/Admin/Store';
 import StoreDashboard from './modules/core/components/Dashboard/StoreDashboard';
+import Emp_Dashboard from './modules/core/components/Dashboard/Emp_Dashboard'
 
 import Inventory from './modules/core/components/Store/Inventory';
 import Approval from './modules/core/components/Store/Approval';
@@ -143,7 +144,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: 'dashboard',
-        element: <Dashboard/>
+        element: <Emp_Dashboard/>
       },
       {
         path: 'createorder',
