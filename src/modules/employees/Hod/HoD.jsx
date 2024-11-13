@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from '../../core/components/Header';
 import Sidebar from '../../core/components/Sidebar';
+import Dashboard from '../../core/components/Dashboard/Dashboard'
 import { Outlet } from 'react-router-dom';
 
 export default function HoD() {
@@ -15,7 +16,6 @@ export default function HoD() {
         <div className="w-64">
           <Sidebar />
         </div>
-
         {/* Main content section, with proper padding to avoid overlapping */}
         <main className="flex-grow p-6 mt-20">
           <Outlet />

@@ -53,7 +53,7 @@ export default function Login() {
       localStorage.setItem("user_id", user_id);
 
       alert("Login successful");
-      navigate(`${response.data.userData.role}`);
+      navigate(`${response.data.userData.role}/dashboard`);
     } catch (error) {
       alert("Enter correct User ID and Password");
     } finally {
