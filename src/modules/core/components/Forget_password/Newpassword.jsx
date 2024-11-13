@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Header from "../Header";
 import { Link, useParams } from "react-router-dom";
-import axiosInstance from '../../axiosauth/axiosConfig';
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export default function Newpassword() {
@@ -25,9 +25,9 @@ export default function Newpassword() {
     //     { newPassword: newPassword },
     //     { headers: { "x-api-key": apikey }, withCredentials: true }
     // );
-    
-      const response = await axiosInstance.post(
-        `${apiurl}/${token}`,
+    const requestUrl = `https://store-management-nyeh.onrender.com/api/user/newpassword/${token}`;
+    console.log("Requesting URL:", requestUrl);
+      const response = await axios.post(requestUrl,
         {
           newPassword: newPassword, // Send newPassword as an object
         },
