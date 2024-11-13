@@ -6,6 +6,7 @@ import axios from '../../axiosauth/axiosConfig';
 export default function Forget_password() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [loading , setLoading] = useState(false);
 
   // Update state when the user types in the email field
   const handleEmail = (e) => {
@@ -15,6 +16,7 @@ export default function Forget_password() {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault(); 
+    setLoading(true);
 
     try {
       const apikey=process.env.REACT_APP_API_KEY_FORGOT_PASSWORD;
@@ -35,6 +37,9 @@ export default function Forget_password() {
     } catch (error) {
       setMessage(error.response.data.message);
       
+    }
+    finally {
+      setLoading(false); // End loading
     }
   };
 
@@ -101,11 +106,12 @@ export default function Forget_password() {
                 </div>
 
                 <div className="!mt-8">
-                  <button
+                <button
                     type="submit"
                     className="w-full shadow-xl py-3 px-4 text-sm tracking-wide rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
+                    disabled={loading} // Disable button when loading
                   >
-                    Submit
+                    {loading ? "Logging in..." : "Log in"}
                   </button>
                 </div>
 

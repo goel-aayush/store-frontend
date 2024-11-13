@@ -8,13 +8,13 @@ import { Eye, EyeOff } from "lucide-react";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [type, setType] = useState("password"); // For input type (password/text)
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false); // For managing the eye icon
-  const [loading, setLoading] = useState(false); // Loading state for request
+  const [type, setType] = useState("password"); 
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false); 
+  const [loading, setLoading] = useState(false); 
 
   const handleToggle = () => {
-    setIsPasswordVisible(!isPasswordVisible); // Toggle visibility
-    setType(isPasswordVisible ? "password" : "text"); // Toggle password field type
+    setIsPasswordVisible(!isPasswordVisible); 
+    setType(isPasswordVisible ? "password" : "text"); 
   };
 
   const handleEmail = (e) => {
@@ -34,7 +34,7 @@ export default function Login() {
     try {
       const apiKey = process.env.REACT_APP_API_KEY_LOGIN;
       const apiurl = process.env.REACT_APP_API_URL_LOGIN;
-      console.log(apiKey, apiurl);
+      
       
       const response = await axios.post(
         apiurl,
@@ -52,11 +52,8 @@ export default function Login() {
       const user_id = response.data.id;
       localStorage.setItem("user_id", user_id);
 
-      const role = Cookies.get("user_role");
-      console.log("role", role);
-
       alert("Login successful");
-      await navigate(`${response.data.userData.role}`);
+      navigate(`${response.data.userData.role}`);
     } catch (error) {
       alert("Enter correct User ID and Password");
     } finally {
