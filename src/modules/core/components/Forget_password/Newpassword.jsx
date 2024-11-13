@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Header from "../Header";
 import { Link, useParams } from "react-router-dom";
-import axios from '../../axiosauth/axiosConfig';
+import axiosInstance from '../../axiosauth/axiosConfig';
 import { useNavigate } from "react-router-dom";
 
 export default function Newpassword() {
@@ -20,7 +20,13 @@ export default function Newpassword() {
     try {
       const apikey = process.env.REACT_APP_API_KEY_NEW_PASSWORD;
       const apiurl = process.env.REACT_APP_API_URL_NEW_PASSWORD;
-      const response = await axios.post(
+    //   const response = await axiosInstance.post(
+    //     `/api/new-password/${token}`,  // Only use the endpoint here
+    //     { newPassword: newPassword },
+    //     { headers: { "x-api-key": apikey }, withCredentials: true }
+    // );
+    
+      const response = await axiosInstance.post(
         `${apiurl}/${token}`,
         {
           newPassword: newPassword, // Send newPassword as an object
