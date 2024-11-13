@@ -3,45 +3,41 @@ import Header from "../Header";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react"; // Import Eye icons
 
 export default function Newpassword() {
-  const { token } = useParams(); // Get the token from the URL
+  const { token } = useParams();
   const navigate = useNavigate();
   const [newPassword, setNewPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false); // State for toggling visibility
+  const [isLoading, setIsLoading] = useState(false); // State for loading spinner
 
   const handleNewPassword = (e) => {
     setNewPassword(e.target.value);
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent page reload on form submission
+    e.preventDefault();
+    setIsLoading(true); // Start loading
 
     try {
       const apikey = process.env.REACT_APP_API_KEY_NEW_PASSWORD;
       const apiurl = process.env.REACT_APP_API_URL_NEW_PASSWORD;
-    //   const response = await axiosInstance.post(
-    //     `/api/new-password/${token}`,  // Only use the endpoint here
-    //     { newPassword: newPassword },
-    //     { headers: { "x-api-key": apikey }, withCredentials: true }
-    // );
-    const requestUrl = `https://store-management-nyeh.onrender.com/api/user/newpassword/${token}`;
-    console.log("Requesting URL:", requestUrl);
-      const response = await axios.post(requestUrl,
-        {
-          newPassword: newPassword, // Send newPassword as an object
-        },
+      const requestUrl = `https://store-management-nyeh.onrender.com/api/user/newpassword/${token}`;
+      const response = await axios.post(
+        requestUrl,
+        { newPassword: newPassword },
         {
           headers: {
             "Content-Type": "application/json",
-            "x-api-key": apikey, // Custom API key header
+            "x-api-key": apikey,
             "x-api-path": apiurl,
           },
-          withCredentials: true, // Ensure cookies are included in cross-site requests
+          withCredentials: true,
         }
       );
       setMessage(response.data.message);
-      console.log(response);
 
       if (response.data.success) {
         navigate("/"); // Navigate to login page on success
@@ -51,17 +47,23 @@ export default function Newpassword() {
         "Error: " + (error.response?.data?.message || "Something went wrong")
       );
       console.error("error:", error);
+    } finally {
+      setIsLoading(false); // End loading
     }
+  };
+
+  // Toggle password visibility
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
   };
 
   return (
     <div>
       <Header />
       <div className="font-[sans-serif]">
-        <div className="min-h-screen flex fle-col items-center justify-center py-6 px-4">
+        <div className="min-h-screen flex flex-col items-center justify-center py-6 px-4">
           <div className="grid md:grid-cols-2 items-center gap-4 max-w-6xl w-full">
             <div className="border border-gray-300 rounded-lg p-6 max-w-md shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] max-md:mx-auto">
-              {/* Use onSubmit for form submission */}
               <form className="space-y-4" onSubmit={handleSubmit}>
                 <div className="mb-8">
                   <h3 className="text-gray-800 text-3xl font-extrabold">
@@ -75,31 +77,25 @@ export default function Newpassword() {
                   </label>
                   <div className="relative flex items-center">
                     <input
-                      name="New Password"
-                      type="password" // Should be password, not text
+                      name="newPassword"
+                      type={isPasswordVisible ? "text" : "password"}
                       required
                       className="w-full text-sm text-gray-800 border border-gray-300 px-4 py-3 rounded-lg outline-blue-600"
                       placeholder="Enter your New Password"
                       onChange={handleNewPassword}
                     />
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="#bbb"
-                      stroke="#bbb"
-                      className="w-[18px] h-[18px] absolute right-4"
-                      viewBox="0 0 24 24"
+                    {/* Toggle visibility button */}
+                    <button
+                      type="button"
+                      className="absolute right-4"
+                      onClick={togglePasswordVisibility}
                     >
-                      <circle
-                        cx="10"
-                        cy="7"
-                        r="6"
-                        data-original="#000000"
-                      ></circle>
-                      <path
-                        d="M14 15H6a5 5 0 0 0-5 5 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 5 5 0 0 0-5-5zm8-4h-2.59l.3-.29a1 1 0 0 0-1.42-1.42l-2 2a1 1 0 0 0 0 1.42l2 2a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42l-.3-.29H22a1 1 0 0 0 0-2z"
-                        data-original="#000000"
-                      ></path>
-                    </svg>
+                      {isPasswordVisible ? (
+                        <EyeOff className="w-[18px] h-[18px] text-gray-500" />
+                      ) : (
+                        <Eye className="w-[18px] h-[18px] text-gray-500" />
+                      )}
+                    </button>
                   </div>
                   {message && <p>{message}</p>}
                 </div>
@@ -108,8 +104,9 @@ export default function Newpassword() {
                   <button
                     type="submit"
                     className="w-full shadow-xl py-3 px-4 text-sm tracking-wide rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
+                    disabled={isLoading} // Disable while loading
                   >
-                    Submit
+                    {isLoading ? "Submitting..." : "Submit"}
                   </button>
                 </div>
 
