@@ -4,13 +4,13 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "../core/axiosauth/axiosConfig";
 import Cookies from "js-cookie";
 import { Eye, EyeOff } from "lucide-react";
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [type, setType] = useState("password"); // For input type (password/text)
   const [isPasswordVisible, setIsPasswordVisible] = useState(false); // For managing the eye icon
-
-  
+  const [loading, setLoading] = useState(false); // Loading state for request
 
   const handleToggle = () => {
     setIsPasswordVisible(!isPasswordVisible); // Toggle visibility
@@ -29,39 +29,38 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Start loading
+
     try {
       const apiKey = process.env.REACT_APP_API_KEY_LOGIN;
       const apiurl = process.env.REACT_APP_API_URL_LOGIN;
-      console.log( apiKey , apiurl);
+      console.log(apiKey, apiurl);
       
       const response = await axios.post(
         apiurl,
-        {
-          email,
-          password,
-        },
+        { email, password },
         {
           headers: {
             "Content-Type": "application/json",
             "x-api-key": apiKey, // Custom API key header
             "x-api-path": apiurl,
           },
-          withCredentials: true, // Ensure cookies are included in cross-site requests
+          withCredentials: true,
         }
       );
-      
-      
+
       const user_id = response.data.id;
       localStorage.setItem("user_id", user_id);
 
       const role = Cookies.get("user_role");
-      console.log("role",role);
-      
-      
+      console.log("role", role);
+
       alert("Login successful");
       await navigate(`${response.data.userData.role}`);
     } catch (error) {
       alert("Enter correct User ID and Password");
+    } finally {
+      setLoading(false); // End loading
     }
   };
 
@@ -78,8 +77,7 @@ export default function Login() {
                     Sign in
                   </h3>
                   <p className="text-gray-500 text-sm mt-4 leading-relaxed">
-                    Sign in to your account and explore a world of
-                    possibilities. Your journey begins here.
+                    Sign in to your account and explore a world of possibilities. Your journey begins here.
                   </p>
                 </div>
 
@@ -103,15 +101,9 @@ export default function Login() {
                       className="w-[18px] h-[18px] absolute right-4"
                       viewBox="0 0 24 24"
                     >
-                      <circle
-                        cx="10"
-                        cy="7"
-                        r="6"
-                        data-original="#000000"
-                      ></circle>
+                      <circle cx="10" cy="7" r="6"></circle>
                       <path
                         d="M14 15H6a5 5 0 0 0-5 5 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 5 5 0 0 0-5-5zm8-4h-2.59l.3-.29a1 1 0 0 0-1.42-1.42l-2 2a1 1 0 0 0 0 1.42l2 2a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42l-.3-.29H22a1 1 0 0 0 0-2z"
-                        data-original="#000000"
                       ></path>
                     </svg>
                   </div>
@@ -171,8 +163,9 @@ export default function Login() {
                   <button
                     type="submit"
                     className="w-full shadow-xl py-3 px-4 text-sm tracking-wide rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
+                    disabled={loading} // Disable button when loading
                   >
-                    Log in
+                    {loading ? "Logging in..." : "Log in"}
                   </button>
                 </div>
 
