@@ -12,6 +12,35 @@ const InventoryTable = () => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const [sessions, setSessions] = useState([]);
+
+  const generateSessions = () => {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth(); // 0 = January, 11 = December
+  
+    // If the month is between January (0) and March (2), the financial year is previousYear-currentYear
+    const financialYearStart = currentMonth < 3 ? currentYear - 1 : currentYear;
+  
+    const startYear = 2020; // Define the start year as per your requirement
+    const generatedSessions = [];
+  
+    for (let year = startYear; year <= financialYearStart; year++) {
+      generatedSessions.push(`${year}-${year + 1}`);
+    }
+  
+    // Reverse to show the latest session first
+    const sessionsReversed = generatedSessions.reverse();
+  
+    setSessions(sessionsReversed);
+  
+    // Set default session to the current financial year
+    setFilters((prev) => ({
+      ...prev,
+      session: `${financialYearStart}-${financialYearStart + 1}`
+    }));
+  };
+  
 
   // Fetch inventory data
   const fetchInventory = async () => {
@@ -34,6 +63,7 @@ const InventoryTable = () => {
 
   useEffect(() => {
     fetchInventory();
+    generateSessions();
     const interval = setInterval(fetchInventory, 30000); // Auto-refresh every 30 seconds
     return () => clearInterval(interval); // Clean up the interval on unmount
   }, []);
@@ -73,9 +103,39 @@ const InventoryTable = () => {
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
+  // Download CSV logic
+  const downloadCSV = () => {
+    const csvHeaders = ["S.No", "Item Name", "Quantity", "Bill No", "Buy From", "Date of Purchase", "Accepted By"];
+    const csvRows = filteredInventory.map((item, index) => [
+      index + 1,
+      item.item_name || "N/A",
+      item.quantity || "N/A",
+      item.bill_no || "N/A",
+      item.buy_from || "N/A",
+      item.date ? new Date(item.date).toLocaleDateString("en-GB") : "N/A",
+      item.accepted_by || "N/A"
+    ]);
+
+    const csvContent = [
+      csvHeaders.join(","), // Add the headers
+      ...csvRows.map(row => row.join(",")) // Add the rows
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "inventory_report.csv";
+    link.click();
+
+    URL.revokeObjectURL(url); // Clean up the URL object
+  };
+
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">Inventory Items</h2>
+
       <div className="flex flex-col sm:flex-row sm:space-x-4 mb-4">
         <input
           type="text"
@@ -84,14 +144,18 @@ const InventoryTable = () => {
           onChange={handleSearchChange}
           className="p-2 border border-gray-300 rounded-lg w-full sm:w-1/3 mb-2 sm:mb-0"
         />
-        <input
-          type="text"
+        <select
           name="session"
-          placeholder="Filter by session"
           value={filters.session}
           onChange={handleFilterChange}
           className="p-2 border border-gray-300 rounded-lg w-full sm:w-1/3 mb-2 sm:mb-0"
-        />
+        >
+          {sessions.map((session) => (
+            <option key={session} value={session}>
+              {session}
+            </option>
+          ))}
+        </select>
         <input
           type="date"
           name="date"
@@ -100,6 +164,13 @@ const InventoryTable = () => {
           className="p-2 border border-gray-300 rounded-lg w-full sm:w-1/3"
         />
       </div>
+
+      <button
+        onClick={downloadCSV}
+        className="p-2 bg-green-500 text-white rounded-lg mb-4"
+      >
+        Download Report
+      </button>
 
       {error && <p className="text-red-500">{error}</p>}
 
@@ -113,13 +184,12 @@ const InventoryTable = () => {
             <th className="border px-4 py-2">Buy From</th>
             <th className="border px-4 py-2">Date of Purchase</th>
             <th className="border px-4 py-2">Accepted By</th>
-            <th className="border px-4 py-2">Upload Bills</th>
           </tr>
         </thead>
         <tbody>
           {paginatedInventory.length === 0 ? (
             <tr>
-              <td colSpan="8" className="text-center py-4">
+              <td colSpan="7" className="text-center py-4">
                 No items match your search and filter criteria.
               </td>
             </tr>
@@ -135,27 +205,18 @@ const InventoryTable = () => {
                   {item.date ? new Date(item.date).toLocaleDateString("en-GB") : "N/A"}
                 </td>
                 <td className="border px-4 py-2">{item.accepted_by || "N/A"}</td>
-                <td className="border px-4 py-2">
-                  <input type="file" />
-                  <button className="mt-2 p-1 bg-blue-500 text-white rounded">
-                    Upload Bill
-                  </button>
-                </td>
               </tr>
             ))
           )}
         </tbody>
       </table>
 
-      {/* Pagination controls */}
       <div className="flex justify-center space-x-2 mt-4">
-        {Array.from({ length: totalPages }, (_, index) => (
+        {Array.from({ length: totalPages }).map((_, index) => (
           <button
-            key={index + 1}
+            key={index}
             onClick={() => handlePageChange(index + 1)}
-            className={`px-3 py-1 rounded ${
-              currentPage === index + 1 ? "bg-blue-500 text-white" : "bg-gray-200"
-            }`}
+            className={`px-4 py-2 border rounded-lg ${currentPage === index + 1 ? "bg-blue-500 text-white" : "bg-gray-100"}`}
           >
             {index + 1}
           </button>

@@ -52,10 +52,10 @@ export default function Login() {
       const user_id = response.data.id;
       localStorage.setItem("user_id", user_id);
 
-      toast.success("Login Successful!", { position: "top-right" });
+      toast.success("Login Successful!", { position: "top-right" , onClose: undefined }  );
       navigate(`${response.data.userData.role}/dashboard`);
     } catch (error) {
-      toast.error("Enter correct User ID and Password", { position: "top-right" });
+      toast.error("Enter correct User ID and Password", { position: "top-right" , onClose: undefined } );
       console.error("Login error:", error);
     } finally {
       setLoading(false);

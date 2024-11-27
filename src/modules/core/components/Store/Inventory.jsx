@@ -6,7 +6,6 @@ const Inventory = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleNewItem = (newItem) => {
-    // Optional: Add new item logic if you want to automatically show the new item in the table
     setIsModalOpen(false); // Close the modal after adding the item
   };
 

@@ -43,7 +43,7 @@ export default function Header() {
         // Delay navigation to allow the toast to be visible
         setTimeout(() => {
           navigate("/");
-        }, 1000); // 1-second delay to match the toast's autoClose duration
+        }, 3000); // 1-second delay to match the toast's autoClose duration
       }
       
     } catch (error) {
