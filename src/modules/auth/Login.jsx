@@ -1,20 +1,21 @@
 import React, { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Header from "../core/components/Header";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../core/axiosauth/axiosConfig";
-
 import { Eye, EyeOff } from "lucide-react";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [type, setType] = useState("password"); 
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false); 
-  const [loading, setLoading] = useState(false); 
+  const [type, setType] = useState("password");
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleToggle = () => {
-    setIsPasswordVisible(!isPasswordVisible); 
-    setType(isPasswordVisible ? "password" : "text"); 
+    setIsPasswordVisible(!isPasswordVisible);
+    setType(isPasswordVisible ? "password" : "text");
   };
 
   const handleEmail = (e) => {
@@ -29,20 +30,19 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Start loading
+    setLoading(true);
 
     try {
       const apiKey = process.env.REACT_APP_API_KEY_LOGIN;
       const apiurl = process.env.REACT_APP_API_URL_LOGIN;
-      
-      
+
       const response = await axios.post(
         apiurl,
         { email, password },
         {
           headers: {
             "Content-Type": "application/json",
-            "x-api-key": apiKey, // Custom API key header
+            "x-api-key": apiKey,
             "x-api-path": apiurl,
           },
           withCredentials: true,
@@ -52,12 +52,13 @@ export default function Login() {
       const user_id = response.data.id;
       localStorage.setItem("user_id", user_id);
 
-      alert("Login successful");
+      toast.success("Login Successful!", { position: "top-right" });
       navigate(`${response.data.userData.role}/dashboard`);
     } catch (error) {
-      alert("Enter correct User ID and Password");
+      toast.error("Enter correct User ID and Password", { position: "top-right" });
+      console.error("Login error:", error);
     } finally {
-      setLoading(false); // End loading
+      setLoading(false);
     }
   };
 
@@ -70,18 +71,13 @@ export default function Login() {
             <div className="border border-gray-300 rounded-lg p-6 max-w-md shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] max-md:mx-auto">
               <form className="space-y-4" onSubmit={handleSubmit}>
                 <div className="mb-8">
-                  <h3 className="text-gray-800 text-3xl font-extrabold">
-                    Sign in
-                  </h3>
+                  <h3 className="text-gray-800 text-3xl font-extrabold">Sign in</h3>
                   <p className="text-gray-500 text-sm mt-4 leading-relaxed">
                     Sign in to your account and explore a world of possibilities. Your journey begins here.
                   </p>
                 </div>
-
                 <div>
-                  <label className="text-gray-800 text-sm mb-2 block">
-                    User name
-                  </label>
+                  <label className="text-gray-800 text-sm mb-2 block">User name</label>
                   <div className="relative flex items-center">
                     <input
                       name="username"
@@ -91,28 +87,14 @@ export default function Login() {
                       placeholder="Enter user name"
                       onChange={handleEmail}
                     />
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="#bbb"
-                      stroke="#bbb"
-                      className="w-[18px] h-[18px] absolute right-4"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle cx="10" cy="7" r="6"></circle>
-                      <path
-                        d="M14 15H6a5 5 0 0 0-5 5 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 5 5 0 0 0-5-5zm8-4h-2.59l.3-.29a1 1 0 0 0-1.42-1.42l-2 2a1 1 0 0 0 0 1.42l2 2a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42l-.3-.29H22a1 1 0 0 0 0-2z"
-                      ></path>
-                    </svg>
                   </div>
                 </div>
                 <div>
-                  <label className="text-gray-800 text-sm mb-2 block">
-                    Password
-                  </label>
+                  <label className="text-gray-800 text-sm mb-2 block">Password</label>
                   <div className="relative flex items-center">
                     <input
                       name="password"
-                      type={type} // Input type changes based on state
+                      type={type}
                       required
                       className="w-full text-sm text-gray-800 border border-gray-300 px-4 py-3 rounded-lg outline-blue-600"
                       placeholder="Enter password"
@@ -129,7 +111,6 @@ export default function Login() {
                     </span>
                   </div>
                 </div>
-
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <div className="flex items-center">
                     <input
@@ -145,33 +126,24 @@ export default function Login() {
                       Remember me
                     </label>
                   </div>
-
                   <div className="text-sm">
-                    <Link
-                      to="forgetpassword"
-                      className="text-blue-600 hover:underline font-semibold"
-                    >
+                    <Link to="forgetpassword" className="text-blue-600 hover:underline font-semibold">
                       Forgot your password?
                     </Link>
                   </div>
                 </div>
-
                 <div className="!mt-8">
                   <button
                     type="submit"
                     className="w-full shadow-xl py-3 px-4 text-sm tracking-wide rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
-                    disabled={loading} // Disable button when loading
+                    disabled={loading}
                   >
                     {loading ? "Logging in..." : "Log in"}
                   </button>
                 </div>
-
                 <p className="text-sm !mt-8 text-center text-gray-800">
                   Don't have an account?{" "}
-                  <Link
-                    to=""
-                    className="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap"
-                  >
+                  <Link to="" className="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap">
                     Contact to Admin
                   </Link>
                 </p>
@@ -187,6 +159,8 @@ export default function Login() {
           </div>
         </div>
       </div>
+      {/* Add ToastContainer */}
+      <ToastContainer />
     </div>
   );
 }

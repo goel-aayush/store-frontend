@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import axios from "../../axiosauth/axiosConfig";
 import { useUser } from "../../../utils/UserContext"; // Import the context
-import Cookies from "js-cookie";
 
 export default function Order() {
-  const { user } = useUser();
-   // Get user details from context
-  console.log("user" ,user);
+  const { user } = useUser();  // Get user details from context
+  
   
 
 

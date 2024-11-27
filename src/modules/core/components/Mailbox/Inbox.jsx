@@ -32,7 +32,7 @@ const Inbox = () => {
     };
 
     fetchEmailNotifications();
-  }, []);
+  }, [user.email]);
 
   if (loading) {
     return <p>Loading email notifications...</p>;

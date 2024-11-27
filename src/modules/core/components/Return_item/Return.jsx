@@ -7,7 +7,6 @@ const Return = () => {
   const [error, setError] = useState(null);
 
   const user_id = localStorage.getItem("user_id");
-  console.log("order_id:", user_id);
 
   useEffect(() => {
     const fetchApprovedOrders = async () => {

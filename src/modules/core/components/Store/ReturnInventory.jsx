@@ -23,6 +23,7 @@ const ReturnInventory = () => {
         headers: {
           "Content-Type": "application/json",
           "x-api-key": apikey,
+          "x-api-path": apiurl,
         },
         withCredentials: true,
       });
