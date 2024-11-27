@@ -1,9 +1,9 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-    baseURL: 'https://store-management-nyeh.onrender.com', 
+    baseURL: 'http://localhost:5001', 
 });
-
+//https://store-management-nyeh.onrender.com
 
 axiosInstance.interceptors.request.use(
     (config) => {

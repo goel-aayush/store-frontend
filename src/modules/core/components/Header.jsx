@@ -42,6 +42,7 @@ export default function Header() {
           withCredentials: true, // Ensure cookies are included in cross-site requests
         }
       );
+      localStorage.clear();
       navigate("/");
     } catch (error) {
       console.log(error);

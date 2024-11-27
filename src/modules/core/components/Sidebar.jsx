@@ -7,14 +7,14 @@ import { useUser } from "../../utils/UserContext";
 
 export default function Sidebar() {
   const { user } = useUser();
-  // console.log(Cookies);
-  console.log("user" , user);
+  
+  
   
   const name = user.name
-  console.log(name);
+  
   
   const email = user.email
-  console.log(email);
+  
   
   
   return (
