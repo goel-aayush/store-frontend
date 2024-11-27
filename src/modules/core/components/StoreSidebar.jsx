@@ -94,7 +94,7 @@ export default function StoreSidebar() {
           </Link>
         </li>
         <li>
-          <a href="" className="text-black text-sm flex items-center hover:bg-gray-700 rounded px-4 py-3 transition-all">
+          <a href="inbox" className="text-black text-sm flex items-center hover:bg-gray-700 rounded px-4 py-3 transition-all">
             <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" stroke='currentColor' className="w-[18px] h-[18px] mr-4"
               viewBox="0 0 682.667 682.667">
               <defs>
