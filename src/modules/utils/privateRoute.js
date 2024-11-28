@@ -12,13 +12,8 @@ const PrivateRoute = ({ children, allowedRoles }) => {
       try {
         const response = await axios.get('/api/user/auth_check', { withCredentials: true });
 
-        console.log("response",response);
-        
-        
         const { role, emp_code, name, email, dept  } = response.data;
-        console.log("auth",response.data.dept);
         
-
         if (allowedRoles.includes(role)) {
           // Store user details in context
           setUser({ role, emp_code, name, email, dept});
