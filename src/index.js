@@ -89,9 +89,9 @@ const router = createBrowserRouter([
     ]
   },
   {
-    path: '/admin',
+    path: '/store',
     element: (
-      <PrivateRoute allowedRoles={['admin']}>
+      <PrivateRoute allowedRoles={['store']}>
         <Store/>
       </PrivateRoute>
     ),
