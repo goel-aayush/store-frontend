@@ -7,15 +7,9 @@ import { useUser } from "../../utils/UserContext";
 
 export default function Sidebar() {
   const { user } = useUser();
-  
-  
-  
   const name = user.name
-  
-  
   const email = user.email
-  
-  
+
   
   return (
     <div>

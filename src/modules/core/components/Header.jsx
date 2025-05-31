@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { Power } from "lucide-react";
 import logo from "./../../../assets/college_logo/be13a6bbf061ffbcc07ab76416ffb65b.png";
 import { useNavigate } from "react-router-dom";
 import axios from "../axiosauth/axiosConfig";
-import Cookies from "js-cookie";
+import { useUser } from "../../utils/UserContext";
 
 export default function Header() {
+  const { user } = useUser();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
 
   // Check authentication status on component mount
   useEffect(() => {
-    const token = Cookies.get("auth_token");
-    setIsAuthenticated(!!token);
-    if (token) {
+    if (user) {
       setIsAuthenticated(true);
+      return;
     }
-  }, []);
+    setIsAuthenticated(false);
+  }, [user]);
 
   // Handle logout
 
@@ -27,7 +27,7 @@ export default function Header() {
     const apiurl = process.env.REACT_APP_API_URL_LOGOUT;
 
     try {
-      const response = await axios.post(
+      await axios.post(
         apiurl,
         {}, // empty body
         {
@@ -37,19 +37,13 @@ export default function Header() {
             "x-api-path": apiurl,
           },
           withCredentials: true,
-        }
+        },
+        toast("Logout successful!"),
+        setIsAuthenticated(false),
+        navigate("/"),
+        localStorage.clear()
       );
-
-      if (response.status === 200) {
-        localStorage.clear();
-        toast.success("Logout successful!", { position: "top-right" });
-        setIsAuthenticated(false);
-        navigate("/");
-      }
     } catch (error) {
-      toast.error("Failed to logout. Please try again.", {
-        position: "top-right",
-      });
       console.error("Logout failed: ", error);
     }
   };
