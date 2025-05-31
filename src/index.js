@@ -48,6 +48,7 @@ const router = createBrowserRouter([
       {
         path: 'dashboard',
         element: <Dashboard/>
+        
       },
       {
         path: 'orderapproval',
@@ -89,11 +90,11 @@ const router = createBrowserRouter([
     ]
   },
   {
-    path: '/store',
+    path: '/admin',
     element: (
-      <PrivateRoute allowedRoles={['Store']}>
+       <PrivateRoute allowedRoles={['admin']}>
         <Store/>
-      </PrivateRoute>
+      </PrivateRoute> 
     ),
     children: [
       {

@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 import Header from "../core/components/Header";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../core/axiosauth/axiosConfig";
@@ -51,11 +50,21 @@ export default function Login() {
 
       const user_id = response.data.id;
       localStorage.setItem("user_id", user_id);
+      toast("Login successful!");
 
-      toast.success("Login Successful!", { position: "top-right" , onClose: undefined }  );
       navigate(`${response.data.userData.role}/dashboard`);
     } catch (error) {
-      toast.error("Enter correct User ID and Password", { position: "top-right" , onClose: undefined } );
+      toast("Login failed. Please try again.", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        closeToastOnClick: true,
+      });
       console.error("Login error:", error);
     } finally {
       setLoading(false);
@@ -71,13 +80,18 @@ export default function Login() {
             <div className="border border-gray-300 rounded-lg p-6 max-w-md shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] max-md:mx-auto">
               <form className="space-y-4" onSubmit={handleSubmit}>
                 <div className="mb-8">
-                  <h3 className="text-gray-800 text-3xl font-extrabold">Sign in</h3>
+                  <h3 className="text-gray-800 text-3xl font-extrabold">
+                    Sign in
+                  </h3>
                   <p className="text-gray-500 text-sm mt-4 leading-relaxed">
-                    Sign in to your account and explore a world of possibilities. Your journey begins here.
+                    Sign in to your account and explore a world of
+                    possibilities. Your journey begins here.
                   </p>
                 </div>
                 <div>
-                  <label className="text-gray-800 text-sm mb-2 block">User name</label>
+                  <label className="text-gray-800 text-sm mb-2 block">
+                    User name
+                  </label>
                   <div className="relative flex items-center">
                     <input
                       name="username"
@@ -90,7 +104,9 @@ export default function Login() {
                   </div>
                 </div>
                 <div>
-                  <label className="text-gray-800 text-sm mb-2 block">Password</label>
+                  <label className="text-gray-800 text-sm mb-2 block">
+                    Password
+                  </label>
                   <div className="relative flex items-center">
                     <input
                       name="password"
@@ -127,7 +143,10 @@ export default function Login() {
                     </label>
                   </div>
                   <div className="text-sm">
-                    <Link to="forgetpassword" className="text-blue-600 hover:underline font-semibold">
+                    <Link
+                      to="forgetpassword"
+                      className="text-blue-600 hover:underline font-semibold"
+                    >
                       Forgot your password?
                     </Link>
                   </div>
@@ -143,7 +162,10 @@ export default function Login() {
                 </div>
                 <p className="text-sm !mt-8 text-center text-gray-800">
                   Don't have an account?{" "}
-                  <Link to="" className="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap">
+                  <Link
+                    to=""
+                    className="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap"
+                  >
                     Contact to Admin
                   </Link>
                 </p>
@@ -160,7 +182,7 @@ export default function Login() {
         </div>
       </div>
       {/* Add ToastContainer */}
-      <ToastContainer />
+      <ToastContainer containerId={"login"} />
     </div>
   );
 }
