@@ -13,20 +13,23 @@ export default function Header() {
 
   // Check authentication status on component mount
   useEffect(() => {
-    const token = Cookies.get("name");
+    const token = Cookies.get("auth_token");
     setIsAuthenticated(!!token);
+    if (token) {
+      setIsAuthenticated(true);
+    }
   }, []);
 
   // Handle logout
+
   const handleLogout = async () => {
-    console.log("Logout clicked");
     const apikey = process.env.REACT_APP_API_KEY_LOGOUT;
     const apiurl = process.env.REACT_APP_API_URL_LOGOUT;
 
     try {
       const response = await axios.post(
         apiurl,
-        {},
+        {}, // empty body
         {
           headers: {
             "Content-Type": "application/json",
@@ -39,19 +42,15 @@ export default function Header() {
 
       if (response.status === 200) {
         localStorage.clear();
-        Cookies.remove("name");
-        setIsAuthenticated(false);
-
         toast.success("Logout successful!", { position: "top-right" });
-
-        // Navigate immediately after API call
-        // navigate("/");
+        setIsAuthenticated(false);
+        navigate("/");
       }
     } catch (error) {
-      console.error("Logout failed: ", error);
       toast.error("Failed to logout. Please try again.", {
         position: "top-right",
       });
+      console.error("Logout failed: ", error);
     }
   };
 
@@ -146,17 +145,10 @@ export default function Header() {
 
           {/* Login/Logout Button */}
           <div className="flex max-lg:ml-auto space-x-3">
-            {isAuthenticated ? (
+            {isAuthenticated && (
               <button
                 className="px-4 py-2 text-sm rounded-full font-bold text-gray-500 border-2 transition-all ease-in-out duration-300 hover:bg-transparent hover:text-red-600"
                 onClick={handleLogout}
-              >
-                <Power />
-              </button>
-            ) : (
-              <button
-                className="px-4 py-2 text-sm rounded-full font-bold text-gray-500 border-2 transition-all ease-in-out duration-300 hover:bg-transparent hover:text-[#007bff]"
-                onClick={() => navigate("/")}
               >
                 <Power />
               </button>

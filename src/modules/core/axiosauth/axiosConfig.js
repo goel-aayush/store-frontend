@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:5001",
+  baseURL: "https://store-management-nyeh.onrender.com/",
 });
 //
 //https://store-management-nyeh.onrender.com
