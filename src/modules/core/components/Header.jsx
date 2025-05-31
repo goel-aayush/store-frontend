@@ -19,6 +19,7 @@ export default function Header() {
 
   // Handle logout
   const handleLogout = async () => {
+    console.log("Logout clicked");
     const apikey = process.env.REACT_APP_API_KEY_LOGOUT;
     const apiurl = process.env.REACT_APP_API_URL_LOGOUT;
 
