@@ -24,32 +24,34 @@ export default function Header() {
     const apiurl = process.env.REACT_APP_API_URL_LOGOUT;
 
     try {
-      const response = await axios.post(apiurl, {}, {
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": apikey,
-          "x-api-path":apiurl
-        },
-        withCredentials: true,
-      });
+      const response = await axios.post(
+        apiurl,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": apikey,
+            "x-api-path": apiurl,
+          },
+          withCredentials: true,
+        }
+      );
 
       if (response.status === 200) {
         localStorage.clear();
         Cookies.remove("name");
         setIsAuthenticated(false);
-      
-        // Show the toast first
+
         toast.success("Logout successful!", { position: "top-right" });
-      
-        // Delay navigation to allow the toast to be visible
-        setTimeout(() => {
-          navigate("/");
-        }, 3000); // 1-second delay to match the toast's autoClose duration
+
+        // Navigate immediately after API call
+        // navigate("/");
       }
-      
     } catch (error) {
       console.error("Logout failed: ", error);
-      toast.error("Failed to logout. Please try again.", { position: "top-right" });
+      toast.error("Failed to logout. Please try again.", {
+        position: "top-right",
+      });
     }
   };
 
